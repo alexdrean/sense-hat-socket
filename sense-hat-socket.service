@@ -1,0 +1,14 @@
+[Unit]
+Description=sense-hat-socket service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=pi
+ExecStart=/usr/lib/sense-hat-socket
+
+[Install]
+WantedBy=multi-user.target
