@@ -13,6 +13,7 @@ sudo make install
 ```
 
 # Usage
+## Bash
 ```bash
 netcat -U /run/sense-hat/imu.sock
 ```
