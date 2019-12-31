@@ -26,6 +26,10 @@ Output
 ...
 ```
 
+# Calibration
+Place your RTIMULib.ini file in /etc
+`/etc/RTIMULib.ini`
+
 # How to uninstall
 ```bash
 cd ~/sense-hat-socket
