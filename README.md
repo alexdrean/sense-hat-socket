@@ -3,6 +3,8 @@ Access the Raspberry Pi sense-hat IMU data from any language with a UNIX Socket
 
 # Installation
 ```bash
+sudo apt update
+sudo apt install -y sense-hat
 git clone https://github.com/alexdrean/sense-hat-socket
 cd sense-hat-socket
 make
