@@ -2,6 +2,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <sys/file.h>
+#include <sys/stat.h>
 
 #include <signal.h>
 
@@ -11,13 +12,20 @@
 #include <unistd.h>
 #include "RTIMULib.h"
 
-#define SOCK_PATH "/run/sense-hat/imu.sock"
-#define SOCK_LOCK_PATH "/run/sense-hat/imu.sock.lock"
+#define SOCK_FOLDER "/run/sense-hat"
+#define SOCK_PATH SOCK_FOLDER "/imu.sock"
+#define SOCK_LOCK_PATH SOCK_FOLDER "/imu.sock.lock"
 
 using namespace std;
 
 int acquireLock() {
     // open lock file
+    if (mkdir(SOCK_FOLDER, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1) {
+        if (errno != EEXIST) {
+            cout << "cannot create directory: " << strerror(errno) << endl;
+            throw runtime_error(strerror(errno));
+        }
+    }
     int lock_fd = open(SOCK_LOCK_PATH, O_RDONLY | O_CREAT, 0600);
     if (lock_fd == -1)
         return -1;
