@@ -18,14 +18,26 @@
 
 using namespace std;
 
-int acquireLock() {
-    // open lock file
+int createFolder() {
     if (mkdir(SOCK_FOLDER, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1) {
         if (errno != EEXIST) {
             cout << "cannot create directory: " << strerror(errno) << endl;
-            throw runtime_error(strerror(errno));
+            return -1;
         }
     }
+    return 0;
+}
+
+int setPermissions() {
+    if (chmod(SOCK_PATH, 0666) == -1) {
+        cout << "cannot chmod: " << strerror(errno) << endl;
+        return -1;
+    }
+    return 0;
+}
+
+int acquireLock() {
+    // open lock file
     int lock_fd = open(SOCK_LOCK_PATH, O_RDONLY | O_CREAT, 0600);
     if (lock_fd == -1)
         return -1;
@@ -51,11 +63,12 @@ int createSocket() {
     name.sun_family = AF_UNIX;
     strcpy(name.sun_path, SOCK_PATH);
 
+    check(createFolder(), "could not create folder");
     check(acquireLock(), "could not acquire lock");
     unlink(SOCK_PATH);
 
     check(bind(sock, (struct sockaddr *) &name, sizeof(struct sockaddr_un)), "binding unix datagram socket");
-
+    check(setPermissions(), "could not set permissions");
     check(listen(sock, 5), "listen");
     int flags = check(fcntl(sock, F_GETFL), "could not get flags");
     check(fcntl(sock, F_SETFL, flags | O_NONBLOCK), "could not set flags");
