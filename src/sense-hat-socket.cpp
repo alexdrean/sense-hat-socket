@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 #include <unistd.h>
-#include "RTIMULib.h"
+#include <RTIMULib.h>
 
 #define SOCK_FOLDER "/run/sense-hat"
 #define SOCK_PATH SOCK_FOLDER "/imu.sock"
