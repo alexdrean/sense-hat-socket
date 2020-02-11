@@ -9,6 +9,7 @@ install:
 	systemctl stop sense-hat-socket.service || true
 	cp bin/sense-hat-socket /usr/lib/sense-hat-socket
 	cp sense-hat-socket.service /etc/systemd/system/sense-hat-socket.service
+	systemctl enable sense-hat-socket.service
 	systemctl restart sense-hat-socket.service
 	@echo "Install sense-hat-socket SUCCESS"
 
